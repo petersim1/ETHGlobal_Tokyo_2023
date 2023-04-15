@@ -13,16 +13,22 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const { slug, address } = req.query;
   const docType = slug?.toString().toUpperCase() || "SAFT";
   const contractAddress = docMapper[docType as keyof typeof docMapper] as string;
-  console.log(contractAddress);
-  console.log(address);
 
   const provider = new ethers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
 
   const contract = new ethers.Contract(contractAddress, abi, provider);
-  contract
-    .ownedTokenIds(address, 1)
-    .then((result) => {
-      return res.status(200).json({ result });
+  return contract
+    .getOwnedTokenIds(address)
+    .then((tokenIds) => {
+      console.log(tokenIds);
+      return Promise.all(
+        tokenIds.map((tokenId: string) => {
+          return contract.tokenContracts(tokenId);
+        }),
+      );
+    })
+    .then((tokens) => {
+      return res.status(200).json({ tokens });
     })
     .catch((error) => {
       console.log(error);

@@ -17,6 +17,7 @@ const DocTotal = (): JSX.Element => {
           }
         })
         .then((result) => {
+          console.log(result);
           setTokens(result);
         })
         .catch((error) => {
@@ -28,8 +29,6 @@ const DocTotal = (): JSX.Element => {
       setTokens([]);
     };
   }, [isConnected, account]);
-
-  console.log(isConnected, account);
 
   return (
     <div>
