@@ -54,7 +54,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*/api/*"],
+      files: ["**/api/**"],
       rules: {
         "@typescript-eslint/explicit-function-return-type": [OFF],
       },
