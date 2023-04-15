@@ -27,7 +27,7 @@ module.exports = {
     "import/export": 0,
     quotes: [ERROR, "double"],
     "no-console": OFF,
-    "@typescript-eslint/explicit-function-return-type": OFF,
+    "@typescript-eslint/explicit-function-return-type": WARN,
     "@typescript-eslint/no-var-requires": 1,
     "max-len": [
       ERROR,
@@ -54,9 +54,9 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.ts", "*.tsx"],
+      files: ["*/api/*"],
       rules: {
-        "@typescript-eslint/explicit-function-return-type": [WARN],
+        "@typescript-eslint/explicit-function-return-type": [OFF],
       },
     },
     {

@@ -1,0 +1,45 @@
+import styles from "@/styles/Layout.module.css";
+import Dropdown from "@/components/Elements/Dropdown";
+
+const Sidebar = (): JSX.Element => {
+  return (
+    <nav className={styles.sidebar_nav}>
+      <div className={styles.sidebar}>
+        <Dropdown
+          title="New Doc"
+          icon={"/images/add.svg"}
+          showArrow={true}
+          style={{ fontSize: "1.75rem !important" }}
+        >
+          <ul>
+            <li>SAFT</li>
+            <li aria-disabled={true} data-disabled={true}>
+              SAFE
+            </li>
+            <li aria-disabled={true} data-disabled={true}>
+              NDA
+            </li>
+          </ul>
+        </Dropdown>
+        <Dropdown
+          title="My Docs"
+          icon={"/images/document.svg"}
+          showArrow={true}
+          style={{ fontSize: "1.75rem !important" }}
+        >
+          <ul>
+            <li>SAFT</li>
+            <li aria-disabled={true} data-disabled={true}>
+              SAFE
+            </li>
+            <li aria-disabled={true} data-disabled={true}>
+              NDA
+            </li>
+          </ul>
+        </Dropdown>
+      </div>
+    </nav>
+  );
+};
+
+export default Sidebar;
