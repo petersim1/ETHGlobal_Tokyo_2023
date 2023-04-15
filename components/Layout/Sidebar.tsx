@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "@/styles/Layout.module.css";
 import Dropdown from "@/components/Elements/Dropdown";
 import Connect from "./Connect";
@@ -29,7 +30,9 @@ const Sidebar = (): JSX.Element => {
           style={{ fontSize: "1.75rem !important" }}
         >
           <ul>
-            <li>SAFT</li>
+            <li>
+              <Link href="/new/SAFT">SAFT</Link>
+            </li>
             <li aria-disabled={true} data-disabled={true}>
               SAFE
             </li>
