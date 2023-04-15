@@ -94,6 +94,7 @@ contract SmartSAFTAgreement is SmartAgreement {
             SAFTActionItemMetadata storage actionItem = _SAFTs[_tokenId];
 
             actionItem.usdcPool = 0;
+            actionItem.investmentUSDAmt = _usdAmt;
             actionItem.discountMult = _discountMult;
             actionItem.superToken = _superToken;
             actionItem.receiver = _receiver;
@@ -117,8 +118,7 @@ contract SmartSAFTAgreement is SmartAgreement {
         );
 
         require(actionItemSet[_tokenId], "Action Item must be set before triggering action");
-
-        
+        require(vestingInfo.usdcPool == vestingInfo.investmentUSDAmt, "Expected USDC amt was not inputted");
 
         vestingScheduler.createVestingSchedule(
             vestingInfo.superToken,
@@ -155,11 +155,14 @@ contract SmartSAFTAgreement is SmartAgreement {
     function depositUSDCToPool(uint256 _tokenId, uint96 _tokenAmount) public {
         SAFTActionItemMetadata storage vestingInfo = _SAFTs[_tokenId];
 
+
         USDC.approve(address(this), _tokenAmount);
 
         USDC.transferFrom(vestingInfo.receiver, vestingInfo.sender, _tokenAmount);
 
         vestingInfo.usdcPool += _tokenAmount;
+
+        require(vestingInfo.usdcPool <= vestingInfo.investmentUSDAmt, "Cannot put in more than expected investment.");
     }
 
     function swapToUSDCAndDeposit(
