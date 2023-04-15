@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 import { useContext } from "react";
-import { MetamaskContext } from "@/state";
+import { MetamaskContext } from "@/state/wallet";
 
 import styles from "@/styles/Layout.module.css";
 
