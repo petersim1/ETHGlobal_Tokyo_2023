@@ -28,5 +28,5 @@ interface IActionItems {
      * @dev Returns a token ID at a given `index` of all the tokens stored by the contract.
      * Use along with {totalSupply} to enumerate all tokens.
      */
-    function triggerActionItemsUponSigning(uint256 _tokenId) external;
+    //function triggerActionItemsUponSigning(uint256 _tokenId) external;
 }

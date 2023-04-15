@@ -2,58 +2,31 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@opengsn/contracts/src/ERC2771Recipient.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ISmartAgreement.sol";
+import "./IActionItems.sol";
 
-contract SmartAgreement is ISmartAgreement, ERC721Enumerable, Ownable, ERC2771Recipient {
+contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
 
-    using Counters for Counters.Counter;
-    Counters.Counter private _ndaIds;
     mapping (address => bool) admins;
     address public trustedForwarder;
+    IActionItems public actionItems;
 
-    // Optional mapping for token URIs
-    mapping (uint256 => string) private _tokenURIs;
-
-    // Base URI
-    string private _baseURIextended;
-
-    struct NDA {
-        address party1;
-        address party2;
-        bool signed1;
-        bool signed2;
+    struct AContract {
+        mapping (address => bool) partySigned;
+        mapping (uint256 => address) involvedParties;
+        uint256 numParties;
     }
 
-    event NewAgreement(uint256 ndaId, address party1, address party2);
-    event SignAgreement(uint256 ndaId, address party1, address party2, bool party1Signing);
+    mapping (uint256 => AContract) tokenContracts;
 
-    mapping (uint256 => NDA) public ndas;
-    mapping (address => uint256[]) private userNDAs;
-
-    constructor(address _forwarder) ERC721("Example", "Ex") {
+    constructor(address _forwarder, string memory _uri, IActionItems _actionItems) ERC1155(_uri) {
         trustedForwarder = _forwarder;
-    }
-
-    function setTrustedForwarder(address _forwarder) public onlyOwner() {
-        trustedForwarder = _forwarder;
-
-    }
-
-    using Strings for uint256;
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+        actionItems = _actionItems;
     }
 
     modifier onlyAdmin() {
@@ -76,136 +49,74 @@ contract SmartAgreement is ISmartAgreement, ERC721Enumerable, Ownable, ERC2771Re
     function removeAdmin(address _newAdmin) external onlyOwner() {
         admins[_newAdmin] = false;
     }
-    
-    function setBaseURI(string memory baseURI_) external onlyOwner() {
-        _baseURIextended = baseURI_;
-    }
-    
-    function _setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyAdmin() {
-        require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
-        _tokenURIs[tokenId] = _tokenURI;
-    }
-    
-    function _baseURI() internal view virtual override returns (string memory) {
-        return _baseURIextended;
-    }
 
-    function getCurUserNDAs() public view virtual returns (uint256[] memory) {
-        uint256[] memory _ndas = userNDAs[_msgSender()];
-        
-        return _ndas;
-    }
-    
-    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-
-        string memory _tokenURI = _tokenURIs[tokenId];
-        string memory base = _baseURI();
-        
-        // If there is no base URI, return the token URI.
-        if (bytes(base).length == 0) {
-            return _tokenURI;
-        }
-        // If both are set, concatenate the baseURI and tokenURI (via abi.encodePacked).
-        if (bytes(_tokenURI).length > 0) {
-            return string(abi.encodePacked(base, _tokenURI));
-        }
-        // If there is a baseURI but no tokenURI, concatenate the tokenID to the baseURI.
-        return string(abi.encodePacked(base, tokenId.toString()));
-    }
-
-    function exists(uint256 _tokenId) public view returns (bool) {
-        return _exists(_tokenId);
-    }
-
-    function ndaTotalSupply() public view returns (uint256) {
-        uint256 numNdas = _ndaIds.current();
-        return numNdas;
-    }
-
-    function createAgreement(
-        address party1,
-        address party2
-    ) external {
-        _ndaIds.increment();
-        uint256 ndaId = _ndaIds.current();
-
-        NDA memory newAgreement = NDA(party1, party2, false, false);
-
-        ndas[ndaId] = newAgreement;
-        userNDAs[party1].push(ndaId);
-        userNDAs[party2].push(ndaId);
-
-        emit NewAgreement(ndaId, party1, party2);
-    }
-
-    function signAgreement(uint256 _ndaId, 
-                    string memory _metadataContent1,
-                    string memory _metadataContent2,
-                    uint256 _salt) external {
-        require((ndas[_ndaId].party1 == _msgSender() 
-        || ndas[_ndaId].party2 == _msgSender()), "NFT must be minted to one of the signers");
-
-        if (ndas[_ndaId].party1 == _msgSender()) {
-            ndas[_ndaId].signed1 = true;
-
-            if (ndas[_ndaId].signed2) {
-                mint(
-                _msgSender(),
-                _ndaId,
-                _metadataContent1,
-                _salt);
-
-                mint(
-                ndas[_ndaId].party2,
-                _ndaId,
-                _metadataContent2,
-                _salt);
-            }
-
-            emit SignAgreement(_ndaId, ndas[_ndaId].party1, ndas[_ndaId].party2, true);
-        }
-        else if (ndas[_ndaId].party2 == _msgSender()) {
-            ndas[_ndaId].signed2 = true;
-
-            if (ndas[_ndaId].signed1) {
-                mint(
-                _msgSender(),
-                _ndaId,
-                _metadataContent2,
-                _salt);
-
-                mint(
-                ndas[_ndaId].party1,
-                _ndaId,
-                _metadataContent1,
-                _salt);
-            }
-
-            emit SignAgreement(_ndaId, ndas[_ndaId].party1, ndas[_ndaId].party2, false);
-        }
-    }
-
-    //TODO: Figure out if salt is necessary
-    function mint(
-        address _to,
-        uint256 _ndaId,
-        string memory _metadataContent,
-        uint256 _salt
-    ) private {
-        require((ndas[_ndaId].party1 == _msgSender() 
-        || ndas[_ndaId].party2 == _msgSender()), "NFT must be minted to one of the signers");
-        require((ndas[_ndaId].signed1 && ndas[_ndaId].signed2), "Contract must be signed by both parties to mint receipts for it");
+    function mint(address[] memory _signees, string memory _metadataContent, uint256 _salt) external {
 
         uint256 _tokenId = generateProof(_metadataContent, _salt);
 
-        _safeMint(_to, _tokenId);
+        AContract storage tk = tokenContracts[_tokenId];
+
+        tk.numParties = _signees.length;
+
+        for (uint8 i = 0; i < tk.numParties; i++) {
+            tk.involvedParties[i] = _signees[i];
+            tk.partySigned[_signees[i]] = true;
+
+            _mint(_signees[i], _tokenId, 1, "");
+        }
     }
 
-    function burn(uint256 tokenId) public virtual {
-        require(_isApprovedOrOwner(_msgSender(), tokenId), "Caller is not owner nor approved to burn");
+    function sign(uint256 _tokenId) external {
+        require(isInvolved(_tokenId, _msgSender()), "Signer must be involved in the contract");
 
-        _burn(tokenId);
+        AContract storage tk = tokenContracts[_tokenId];
+
+        tk.partySigned[_msgSender()] = true;
+    }
+
+    function isInvolved(uint256 _tokenId, address _prospectiveSignee) public view returns (bool) {
+        AContract storage tk = tokenContracts[_tokenId];
+
+        for (uint8 i = 0; i < tk.numParties; i++) {
+            if (_prospectiveSignee == tk.involvedParties[i]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+    * @dev shows whether all parties have signed or not
+    *
+    * @param _tokenId the contract id having it's signer's status checked
+    */
+    function allPartiesSigned(uint256 _tokenId) public view returns (bool) {
+        AContract storage tk = tokenContracts[_tokenId];
+
+        for (uint8 i = 0; i < tk.numParties; i++) {
+            if (!tk.partySigned[tk.involvedParties[i]]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+    * @dev returns the metadata uri for a given id
+    *
+    * @param _id the card id to return metadata for
+    */
+    function uri(uint256 _id) public view override returns (string memory) {
+            //require(exists(_id), "URI: nonexistent token");
+
+            if (allPartiesSigned(_id)) {
+                return string(abi.encodePacked(super.uri(_id), "Signed_Document.json"));
+            } 
+            else {
+                return string(abi.encodePacked(super.uri(_id), "Unsigned_Document.json"));
+            }
     }
 
     /**

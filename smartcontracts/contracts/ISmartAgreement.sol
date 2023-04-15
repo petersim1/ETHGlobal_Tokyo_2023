@@ -10,16 +10,10 @@ interface ISmartAgreement {
     /**
      * @dev Creates a new agreement
      */
-    function createAgreement(
-        address party1,
-        address party2
-    ) external;
+    function mint(address[] memory _signees, string memory _metadataContent, uint256 _salt) external;
 
     /**
      * @dev Signs the agreement
      */
-    function signAgreement(uint256 _agreementId, 
-                    string memory _metadataContent1,
-                    string memory _metadataContent2,
-                    uint256 _salt) external;
+    function sign(uint256 _tokenId) external;
 }
