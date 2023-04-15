@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from "@/styles/Layout.module.css";
 import Dropdown from "@/components/Elements/Dropdown";
 import Connect from "./Connect";
+import OnRamp from "./OnRamp";
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -45,6 +46,9 @@ const Sidebar = (): JSX.Element => {
         </Dropdown>
         <div className={styles.account}>
           <Connect />
+        </div>
+        <div className={styles.account}>
+          <OnRamp />
         </div>
       </div>
     </nav>
