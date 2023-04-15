@@ -52,6 +52,18 @@ export type EditPanelStateBoolI = {
   receiving_wallet: boolean;
 };
 
+export type EditPanelStateBoolSAFTI = {
+  title: boolean;
+  purchase_amount: boolean;
+  date: boolean;
+  disclosing_party: boolean;
+  disclosing_wallet: boolean;
+  receiving_state: boolean;
+  receiving_party: boolean;
+  receiving_wallet: boolean;
+  token_name: boolean;
+};
+
 export type EditPanelStateStringI = {
   title: string;
   disclosing_party: string;
@@ -60,10 +72,22 @@ export type EditPanelStateStringI = {
   receiving_wallet: string;
 };
 
+export type EditPanelStateStringSAFTI = {
+  title: string;
+  purchase_amount: string;
+  date: string;
+  disclosing_party: string;
+  disclosing_wallet: string;
+  receiving_state: string;
+  receiving_party: string;
+  receiving_wallet: string;
+  token_name: string;
+};
+
 export type EditPanelI = {
-  tried: EditPanelStateBoolI;
-  fields: EditPanelStateStringI;
-  valid: EditPanelStateBoolI;
+  tried: EditPanelStateBoolI | EditPanelStateBoolSAFTI;
+  fields: EditPanelStateStringI | EditPanelStateStringSAFTI;
+  valid: EditPanelStateBoolI | EditPanelStateBoolSAFTI;
   setTried: React.Dispatch<React.SetStateAction<EditPanelStateBoolI>>;
   setFields: React.Dispatch<React.SetStateAction<EditPanelStateStringI>>;
   setValid: React.Dispatch<React.SetStateAction<EditPanelStateBoolI>>;

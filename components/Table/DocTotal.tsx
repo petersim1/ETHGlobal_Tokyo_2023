@@ -1,34 +1,8 @@
-import { useContext, useEffect } from "react";
-import { MetamaskContext } from "@/state/wallet";
+import { useContext } from "react";
 import { TokensContext } from "@/state/tokens";
 
 const DocTotal = (): JSX.Element => {
-  const { account, isConnected } = useContext(MetamaskContext);
-  const { ok, loading, tokens, setTokens, setLoading, setOk } = useContext(TokensContext);
-
-  useEffect(() => {
-    if (!!account && isConnected) {
-      setLoading(true);
-      setOk(false);
-      fetch(`/api/balance/SAFT?address=${account}`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        })
-        .then((result) => {
-          setTokens(result.tokens);
-          setLoading(false);
-          setOk(true);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-        });
-    }
-  }, [isConnected, account]);
-
-  console.log(tokens);
+  const { ok, loading, tokens } = useContext(TokensContext);
 
   return (
     <div>

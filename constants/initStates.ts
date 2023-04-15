@@ -122,10 +122,10 @@ export const docInputFieldDisplays = {
       type: "spacer",
     },
     {
-      type: "text",
+      type: "date",
       placeholder: "Date...",
       label: "Today's Date",
-      error: "Input a valid date obj",
+      error: "Input a valid date",
       name: "date",
       hideLabel: false,
     },

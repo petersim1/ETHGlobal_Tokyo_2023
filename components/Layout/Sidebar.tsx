@@ -34,7 +34,7 @@ const Sidebar = (): JSX.Element => {
         >
           <ul>
             <li>
-              <Link href="/view/SAFT">SAFT</Link>
+              <Link href="/list/SAFT">SAFT</Link>
             </li>
             <li aria-disabled={true} data-disabled={true}>
               SAFE

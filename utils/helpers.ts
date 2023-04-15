@@ -87,24 +87,24 @@ export const getDocMapping = (docType: string): any => {
 };
 
 export const docFilter = (
-  ndas: any,
+  contracts: any,
   address: string,
   active: boolean,
   readyOnly: boolean,
 ): any[] => {
-  return ndas
-    .filter((nda: any) => {
+  return contracts
+    .filter((contract: any) => {
       if (active) {
         if (readyOnly) {
-          if (address === nda.wallet.disclosing) {
-            return !nda.signed.disclosing;
+          if (address === contract.address.disclosing) {
+            return !contract.status.disclosing;
           } else {
-            return !nda.signed.receiving;
+            return !contract.status.receiving;
           }
         }
-        return !nda.signed.disclosing || !nda.signed.receiving;
+        return !contract.status.disclosing || !contract.status.receiving;
       }
-      return nda.signed.disclosing && nda.signed.receiving;
+      return contract.status.disclosing && contract.status.receiving;
     })
     .sort((a: any, b: any) => b.tokenId - a.tokenId);
 };

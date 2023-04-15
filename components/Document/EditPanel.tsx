@@ -1,15 +1,19 @@
+/* eslint-disable max-len */
 import InputField from "../Elements/Input";
 import Button from "../Elements/Button";
 import styles from "../../styles/document.module.css";
 import { customFormValidation } from "../../utils/helpers";
 // import { addDocument } from "../../utils/firebase";
 import { EditPanelI } from "../../types/documents";
+import { useContext } from "react";
+import { MetamaskContext } from "@/state/wallet";
 
-// import abi from "../../truffle/abis/smartSAFTAgreement.json";
-// import { BigNumber } from "ethers";
+import abi from "../../truffle/abis/smartSAFTAgreement.json";
+import { ethers } from "ethers";
 
 const EditPanel: React.FC<EditPanelI> = (props): JSX.Element => {
   const { fields, tried, valid, setFields, setTried, setValid, setActive, placeholderObj } = props;
+  const { provider, account } = useContext(MetamaskContext);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const { value, name } = event.currentTarget;
@@ -20,10 +24,6 @@ const EditPanel: React.FC<EditPanelI> = (props): JSX.Element => {
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault();
-
-    // if (!signer || !contract) {
-    //   console.log("Contract Not Ready to Transact, since signer or contract don't exist");
-    // }
 
     const isValid = customFormValidation({
       fields: fields,
@@ -36,6 +36,53 @@ const EditPanel: React.FC<EditPanelI> = (props): JSX.Element => {
 
     if (!isValid) return;
 
+    if (provider) {
+
+      // const providerNew = new ethers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
+      // const signer = await providerNew.getSigner(0);
+
+      const contract = new ethers.Contract(
+        process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SAFT || "",
+        abi,
+        provider,
+      );
+
+      const data = {
+        _signees: [fields.disclosing_wallet, fields.receiving_wallet],
+        _metadataContent: `${fields.title}|${"04/16/2023"}|${fields.disclosing_party}|${
+          fields.receiving_party
+        }`,
+        _salt: Number(process.env.NEXT_PUBLIC_SALTY),
+      };
+
+      provider
+        .request({
+          method: "mint",
+          params: [
+            {
+              from: account,
+              to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SAFT || "",
+              data: data,
+            },
+          ],
+        })
+        .then((datas: any) => {
+          console.log(datas);
+        });
+
+      contract
+        .mint(
+          [fields.disclosing_wallet, fields.receiving_wallet],
+          `${fields.title}|${"04/16/2023"}|${fields.disclosing_party}|${fields.receiving_party}`,
+          process.env.NEXT_PUBLIC_SALTY,
+        )
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     console.log("everything looks good");
   };
 
