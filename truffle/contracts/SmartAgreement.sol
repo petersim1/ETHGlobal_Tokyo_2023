@@ -20,7 +20,8 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
         uint256 numParties;
     }
 
-    mapping (uint256 => AContract) tokenContracts;
+    mapping (uint256 => AContract) public tokenContracts;
+    mapping (address => uint256[]) ownedTokenIds;
 
     constructor(address _forwarder, string memory _uri) ERC1155(_uri) {
         trustedForwarder = _forwarder;
@@ -59,6 +60,8 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
             tk.involvedParties[i] = _signees[i];
 
             _mint(_signees[i], _tokenId, 1, "");
+
+            ownedTokenIds[_msgSender()].push(_tokenId);
         }
     }
 
