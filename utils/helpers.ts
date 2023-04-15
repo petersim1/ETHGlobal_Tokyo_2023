@@ -1,5 +1,10 @@
 import { NDA, SAFT } from "../constants/documents";
 import { CustomFormValidationI } from "../types/documents";
+import {
+  docEditInitialStateBool,
+  docEditInitialState,
+  docInputFieldDisplays,
+} from "../constants/initStates";
 
 export const canSign = (
   address: string,
@@ -56,15 +61,29 @@ export const customFormValidation = (props: CustomFormValidationI): boolean => {
 };
 
 export const getDocMapping = (docType: string): any => {
-  let documentUse = NDA;
+  let documentUse = SAFT;
+  let docEditInit: any = docEditInitialState.SAFT;
+  let docEditBool: any = docEditInitialStateBool.SAFT;
+  let docEditFields: any = docInputFieldDisplays.SAFT;
   if (docType === "SAFE") {
-    documentUse = NDA; // To update in the future.
+    documentUse = NDA; // To update in the future to SAFE versions.
+    docEditInit = docEditInitialState.NDA;
+    docEditBool = docEditInitialStateBool.NDA;
+    docEditFields = docInputFieldDisplays.NDA;
   }
-  if (docType == "SAFT") {
-    documentUse = SAFT;
+  if (docType == "NDA") {
+    documentUse = NDA;
+    docEditInit = docEditInitialState.NDA;
+    docEditBool = docEditInitialStateBool.NDA;
+    docEditFields = docInputFieldDisplays.NDA;
   }
 
-  return documentUse;
+  return {
+    docUse: documentUse,
+    docEditInit,
+    docEditBool,
+    docEditFields,
+  };
 };
 
 export const docFilter = (

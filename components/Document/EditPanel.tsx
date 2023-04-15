@@ -1,7 +1,6 @@
 import InputField from "../Elements/Input";
 import Button from "../Elements/Button";
 import styles from "../../styles/document.module.css";
-import { docEditPlaceholders } from "../../constants/initStates";
 import { customFormValidation } from "../../utils/helpers";
 // import { addDocument } from "../../utils/firebase";
 import { EditPanelI } from "../../types/documents";
@@ -10,7 +9,7 @@ import { EditPanelI } from "../../types/documents";
 // import { BigNumber } from "ethers";
 
 const EditPanel: React.FC<EditPanelI> = (props): JSX.Element => {
-  const { fields, tried, valid, setFields, setTried, setValid, setActive } = props;
+  const { fields, tried, valid, setFields, setTried, setValid, setActive, placeholderObj } = props;
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const { value, name } = event.currentTarget;
@@ -53,81 +52,31 @@ const EditPanel: React.FC<EditPanelI> = (props): JSX.Element => {
   return (
     <div className={styles.panel}>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <InputField
-          type="text"
-          hideLabel={false}
-          placeholder={docEditPlaceholders.title}
-          value={fields.title}
-          label="Document Title"
-          errorMessage="Must Include a Document Title"
-          valid={valid.title || !tried.title}
-          name="title"
-          onChange={handleChange}
-          marginTop={false}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={false}
-        />
-        <div style={{ height: "30px" }} />
-        <InputField
-          type="text"
-          hideLabel={false}
-          placeholder={docEditPlaceholders.disclosing_party}
-          value={fields.disclosing_party}
-          label="Disclosing Party"
-          errorMessage="Must Input a Disclosing Party Name"
-          valid={valid.disclosing_party || !tried.disclosing_party}
-          name="disclosing_party"
-          onChange={handleChange}
-          marginTop={true}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={false}
-        />
-        <InputField
-          type="text"
-          hideLabel={true}
-          placeholder={docEditPlaceholders.disclosing_wallet}
-          value={fields.disclosing_wallet}
-          label="Wallet 1"
-          errorMessage="Must Input a Valid Wallet Address"
-          valid={valid.disclosing_wallet || !tried.disclosing_wallet}
-          name="disclosing_wallet"
-          onChange={handleChange}
-          marginTop={true}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={false}
-        />
-        <div style={{ height: "30px" }} />
-        <InputField
-          type="text"
-          hideLabel={false}
-          placeholder={docEditPlaceholders.receiving_party}
-          value={fields.receiving_party}
-          label="Receiving Party"
-          errorMessage={""}
-          valid={valid.receiving_party || !tried.receiving_party}
-          name="receiving_party"
-          onChange={handleChange}
-          marginTop={true}
-          disabled={false}
-        />
-        <InputField
-          type="text"
-          hideLabel={true}
-          placeholder={docEditPlaceholders.receiving_wallet}
-          value={fields.receiving_wallet}
-          label="Wallet 2"
-          errorMessage="Must Input a Valid Receiving Wallet"
-          valid={valid.receiving_wallet || !tried.receiving_wallet}
-          name="receiving_wallet"
-          onChange={handleChange}
-          marginTop={true}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          disabled={false}
-        />
+        {placeholderObj.map((obj: any, ind: number) => {
+          if (obj.type === "spacer") {
+            return <div style={{ height: "30px" }} key={ind} />;
+          }
+          return (
+            <InputField
+              key={ind}
+              type={obj.type}
+              hideLabel={obj.hideLabel}
+              placeholder={obj.placeholder}
+              value={fields[obj.name as keyof typeof fields]}
+              label={obj.label}
+              errorMessage={obj.error}
+              valid={
+                valid[obj.name as keyof typeof fields] || !tried[obj.name as keyof typeof fields]
+              }
+              name={obj.name}
+              onChange={handleChange}
+              marginTop={false}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              disabled={false}
+            />
+          );
+        })}
         <div className={styles.button_holder}>
           <Button styling="light" disabled={false} large={false}>
             Discard

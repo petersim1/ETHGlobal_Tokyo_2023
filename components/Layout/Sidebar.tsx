@@ -20,8 +20,8 @@ const Sidebar = (): JSX.Element => {
             <li aria-disabled={true} data-disabled={true}>
               SAFE
             </li>
-            <li aria-disabled={true} data-disabled={true}>
-              NDA
+            <li>
+              <Link href="/new/NDA">NDA</Link>
             </li>
           </ul>
         </Dropdown>

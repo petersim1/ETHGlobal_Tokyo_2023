@@ -68,6 +68,7 @@ export type EditPanelI = {
   setFields: React.Dispatch<React.SetStateAction<EditPanelStateStringI>>;
   setValid: React.Dispatch<React.SetStateAction<EditPanelStateBoolI>>;
   setActive: React.Dispatch<React.SetStateAction<EditPanelStateBoolI>>;
+  placeholderObj: any;
 };
 
 export type DocumentConstantI = {
