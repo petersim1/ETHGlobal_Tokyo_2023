@@ -27,15 +27,23 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
   const [validChain, setValidChain] = useState(INITIAL_STATE.validChain);
 
   const requestAccount = (): void => {
+    console.log("CLICKEd", provider);
     if (provider) {
       setIsLoading(true);
-      provider.request({ method: "eth_requestAccounts", params: [] }).then((accounts: string[]) => {
-        if (accounts) {
-          setAccount(accounts[0]);
-          setIsLoaded(true);
+      provider
+        .request({ method: "eth_requestAccounts", params: [] })
+        .then((accounts: string[]) => {
+          if (accounts) {
+            setAccount(accounts[0]);
+            setIsLoaded(true);
+            setIsLoading(false);
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error);
+          setIsLoaded(false);
           setIsLoading(false);
-        }
-      });
+        });
     }
   };
 
@@ -67,14 +75,16 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
     const MMSDK = new MetaMaskSDK();
     const ethereum = MMSDK.getProvider();
     if (ethereum) {
-      setChainId(ethereum.chainId);
-      setAccount(ethereum.selectedAccount);
+      setChainId(ethereum.chainId || "");
+      setAccount(ethereum.selectedAccount || "");
       ethereum.on("accountsChanged", handleAccountChange);
       ethereum.on("chainChanged", handleChainChange);
       ethereum.on("connect", handleConnect);
       setProvider(ethereum);
       isSupportedNetwork(ethereum.chainId);
     }
+    setIsLoaded(true);
+    setIsLoading(false);
 
     return () => {
       if (ethereum) {
@@ -96,7 +106,7 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
       validChain,
       requestAccount,
     };
-  }, [account, isLoading, isLoaded]);
+  }, [provider, account, isLoading, isLoaded]);
 
   return <MetamaskContext.Provider value={value}>{children}</MetamaskContext.Provider>;
 };

@@ -1,5 +1,6 @@
 import styles from "@/styles/Layout.module.css";
 import Dropdown from "@/components/Elements/Dropdown";
+import Connect from "./Connect";
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -37,6 +38,9 @@ const Sidebar = (): JSX.Element => {
             </li>
           </ul>
         </Dropdown>
+        <div className={styles.account}>
+          <Connect />
+        </div>
       </div>
     </nav>
   );

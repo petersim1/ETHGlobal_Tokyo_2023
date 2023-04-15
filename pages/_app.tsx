@@ -6,7 +6,7 @@ import Sidebar from "@/components/Layout/Sidebar";
 import { MetamaskProvider } from "@/state";
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
-  const supportedNetworks = ["0x1"];
+  const supportedNetworks = ["0x1", "0x13881"];
 
   return (
     <MetamaskProvider supportedNetworks={supportedNetworks}>

@@ -3,7 +3,7 @@ export const INITIAL_STATE = {
   account: "",
   chainId: "",
   isLoaded: false,
-  isLoading: false,
+  isLoading: true,
   isConnected: false,
   validChain: false,
 };
