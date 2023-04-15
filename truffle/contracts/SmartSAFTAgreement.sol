@@ -7,7 +7,7 @@ import "./IVestingScheduler.sol";
 import "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperToken.sol";
 
 
-contract SmartSAFTAgreement is SmartAgreement, IActionItems {
+contract SmartSAFTAgreement is SmartAgreement {
     IVestingScheduler vestingScheduler;
     address private treasury;
 
@@ -22,12 +22,8 @@ contract SmartSAFTAgreement is SmartAgreement, IActionItems {
         bytes ctx;
     }
 
-    // tokenId to signer address mapping
-    mapping(uint256 => address[]) private _signers;
     mapping(uint256 => SAFTActionItemMetadata) private _SAFTs;
     mapping(uint256 => bool) private actionItemSet;
-    // signer address to signed status mapping
-    mapping(address => bool) private _signerToStatus;
 
 
     /**
@@ -62,26 +58,6 @@ contract SmartSAFTAgreement is SmartAgreement, IActionItems {
     ) SmartAgreement(_forwarder, _uri) {
         vestingScheduler = _vestingScheduler;
         treasury = _treasury;
-    }
-
-    function getSigners(uint256 _tokenId) external view returns (address[] memory) {
-        return _signers[_tokenId];
-    }
-
-    function hasSigned(address _signer) external view returns (bool) {
-        return _signerToStatus[_signer];
-    }
-
-    function docSigned(uint256 _tokenId) external view returns (bool) {
-        address[] memory signers = _signers[_tokenId];
-
-        for (uint256 i = 0; i < signers.length; i++) {
-            if (!_signerToStatus[signers[i]]) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     function createActionItem(uint256 _tokenId, 
