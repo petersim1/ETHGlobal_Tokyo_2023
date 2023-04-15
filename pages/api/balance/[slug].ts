@@ -20,10 +20,26 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   return contract
     .getOwnedTokenIds(address)
     .then((tokenIds) => {
-      console.log(tokenIds);
       return Promise.all(
-        tokenIds.map((tokenId: string) => {
-          return contract.tokenContracts(tokenId);
+        tokenIds.map(async (tokenId: string) => {
+          const parties = await contract.getPartiesInvolved(tokenId.toString());
+          const states = await Promise.all(
+            parties.map(async (party: string) => {
+              return contract.getSigningState(tokenId.toString(), party);
+            }),
+          );
+          return {
+            tokenId: tokenId.toString(),
+            docType: slug,
+            address: {
+              disclosing: parties[0],
+              receiving: parties[1],
+            },
+            status: {
+              disclosing: states[0],
+              receiving: states[1],
+            },
+          };
         }),
       );
     })

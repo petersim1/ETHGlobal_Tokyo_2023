@@ -17,23 +17,23 @@ const DocTotal = (): JSX.Element => {
           }
         })
         .then((result) => {
-          console.log(result);
-          setTokens(result);
+          setTokens(result.tokens);
+          setLoading(false);
+          setOk(true);
         })
         .catch((error) => {
           console.log(error);
+          setLoading(false);
         });
     }
-
-    return () => {
-      setTokens([]);
-    };
   }, [isConnected, account]);
+
+  console.log(tokens);
 
   return (
     <div>
-      <p>{loading && "loading"}</p>
-      <p>{ok && "ok"}</p>
+      <p>{loading ? "loading" : "not loading"}</p>
+      <p>{ok ? "ok" : "not ok"}</p>
       <table>
         <thead>
           <tr>
@@ -44,7 +44,7 @@ const DocTotal = (): JSX.Element => {
         <tbody>
           <tr>
             <td>SAFT</td>
-            <td>{tokens ? tokens.length : 0}</td>
+            <td>{tokens.length}</td>
           </tr>
           <tr>
             <td>SAFE</td>

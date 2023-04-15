@@ -31,7 +31,7 @@ export const TokensProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setTokens,
       setLoading,
     };
-  }, [account]);
+  }, [account, tokens, loading, ok]);
 
   return <TokensContext.Provider value={value}>{children}</TokensContext.Provider>;
 };
