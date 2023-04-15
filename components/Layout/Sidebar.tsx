@@ -46,8 +46,6 @@ const Sidebar = (): JSX.Element => {
         </Dropdown>
         <div className={styles.account}>
           <Connect />
-        </div>
-        <div className={styles.account}>
           <OnRamp />
         </div>
       </div>

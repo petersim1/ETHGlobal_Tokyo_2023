@@ -4,9 +4,7 @@ import React, { useContext } from "react";
 import { MetamaskContext } from "@/state/wallet";
 import { SafeOnRampKit, StripeAdapter } from "@safe-global/onramp-kit";
 
-export interface WalletFundProps {
-  address: string;
-}
+import styles from "@/styles/Layout.module.css";
 
 const OnRamp = (): JSX.Element => {
   const { account } = useContext(MetamaskContext);
@@ -41,10 +39,8 @@ const OnRamp = (): JSX.Element => {
   };
 
   return (
-    <div id="stripe-root">
-      <button className="btn btn-primary my-2" onClick={fundWallet}>
-        Send USDC with 💳
-      </button>
+    <div id="stripe-root" className={styles.onramp}>
+      <div onClick={fundWallet}>Send USDC with 💳</div>
     </div>
   );
 };
