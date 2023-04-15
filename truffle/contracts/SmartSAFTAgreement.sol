@@ -59,6 +59,9 @@ contract SmartSAFTAgreement is SmartAgreement {
     Super Token Addresses:
         USDCx Mumbai: `0x42bb40bF79730451B11f6De1CbA222F17b87Afd7`
 
+    Biconomy Trusted Gas Forwarder:
+        Mumbai Testnet: 0x69015912AA33720b842dCD6aC059Ed623F28d9f7
+
     ERC20 USDC Addresses:
         Mumbai Testnet: `0xe6b8a5CF854791412c1f6EFC7CAf629f5Df1c747`
 
