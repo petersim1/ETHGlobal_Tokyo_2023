@@ -1,7 +1,6 @@
 import classNames from "classnames";
 
-import font from "../../styles/font.module.css";
-import styles from "../../styles/docview.module.css";
+import styles from "../../styles/document.module.css";
 import DocumentItem from "./DocumentItem";
 import { DocumentViewI } from "../../types/documents";
 
@@ -20,7 +19,7 @@ const Document: React.FC<DocumentViewI> = (props): JSX.Element => {
   return (
     <div className={styles.document_holder}>
       <div
-        className={classNames(font.font_space, font.wt_700, font.size_24, styles.document_title, {
+        className={classNames(styles.document_title, {
           [styles.empty]: !fields.title,
           [styles.selected]: edit && active && active.title,
           [styles.error]: edit && valid && tried && !(valid.title || !tried.title),
@@ -30,15 +29,8 @@ const Document: React.FC<DocumentViewI> = (props): JSX.Element => {
       >
         {fields.title || "."}
       </div>
-      <div
-        className={classNames(
-          styles.document_text,
-          font.font_aeonik_regular,
-          font.wt_400,
-          font.size_15,
-        )}
-      >
-        {doc.map((item: any, i: number) => (
+      <div className={classNames(styles.document_text)}>
+        {doc.map((item, i: number) => (
           <DocumentItem
             type={item.type}
             items={item.items}

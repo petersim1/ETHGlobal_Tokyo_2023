@@ -1,0 +1,58 @@
+.input_holder {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.input_holder.margin_top {
+  margin-top: 5px;
+}
+
+.input_control {
+  width: 100%;
+  height: 42px; 
+  outline: 1px solid var(--grey-light);
+  padding: 10px;
+  background-color: transparent;
+  transition: all 0.25s ease-in-out;
+  color: var(--black);
+  border: none;
+}
+
+.input_control::placeholder {
+  opacity: 0.4;
+}
+
+.input_control:disabled {
+  background-color: var(--grey-light);
+}
+
+.input_control:not(:disabled):active,
+.input_control:not(:disabled):focus {
+  background-color: var(--green-faint);
+  outline: 1px solid var(--green-dark);
+}
+
+.input_control:not(:disabled).invalid {
+  background-color: var(--red-faint);
+  outline: 1px solid var(--red-dark);
+}
+
+.labeller {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.labeller.hidden {
+  display: none;
+  margin-bottom: 0;
+}
+
+.error_message {
+  color: var(--red-dark);
+  margin-top: 5px;
+  display: none;
+}
+
+.error_message.show {
+  display: block;
+}

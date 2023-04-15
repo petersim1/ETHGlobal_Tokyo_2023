@@ -1,0 +1,223 @@
+.button {
+  height: 54px;
+  width: 150px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+  outline: none;
+}
+
+.button.large {
+  width: 100%;
+}
+
+.button:not(.disabled) {
+  cursor: pointer;
+}
+
+.button:not(.disabled):hover,
+.button:not(.disabled):active,
+.button:not(.disabled):focus {
+  opacity: 0.8;
+}
+
+.button.disabled {
+  opacity: 0.4;
+}
+
+.green {
+  color: var(--black);
+  background-color: var(--green-main);
+  border: 1px solid var(--green-dark);
+}
+
+.red {
+  color: var(--black);
+  background-color: var(--red-light);
+  border: 1px solid var(--red-dark);
+}
+
+.light {
+  color: var(--black);
+  background-color: transparent;
+  border: 1px solid var(--black);
+}
+
+.dark {
+  color: var(--white);
+  background-color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.grey {
+  color: var(--black);
+  background-color: var(--grey-waiting);
+  border: 1px solid rgba(21, 21, 21, 0.1);
+}
+
+.action {
+  height: 35px;
+  width: 225px;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: all 0.25s ease-in-out;
+}
+
+.action.green {
+  border: 1px solid rgba(253, 253, 253, 0.3)
+}
+
+.action:not(.disabled) {
+  cursor: pointer;
+}
+
+.action:not(.disabled):hover,
+.action:not(.disabled):active,
+.action:not(.disabled):focus {
+  opacity: 0.8;
+}
+
+.button.disabled {
+  opacity: 0.4;
+}
+
+.action_holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag {
+  width: 125px;
+  height: 30px;
+  border-radius: 20px;
+  border: 1px solid var(--black);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--black)
+}
+
+.tag.fill {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.tag.fill .action_holder {
+  margin-left: 10px;
+  max-width: calc(100% - 30px);
+}
+
+.tag.fill .address {
+  max-width: 100%;
+}
+
+.tag.ready {
+  background-color: var(--black);
+  color: var(--bg-main);
+}
+
+.address {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 8ch;
+}
+
+.receipt {
+  height: 35px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.slider_holder {
+  height: 60px;
+  width: 100%;
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  outline: none;
+  position: relative;
+  background-color: hsl(233, 4%, 58%);
+  border: 3px solid hsl(0, 0%, 90%);
+  color: var(--bg-main);
+  transition: all 0.25s ease-in-out;
+}
+
+.slider_holder.done {
+  background-color: hsl(144, 57%, 44%);
+  border: 3px solid hsl(144, 89%, 76%);
+  opacity: 0.5;
+}
+
+.slider_holder input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  background: transparent;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.slider_holder input::-webkit-slider-thumb {
+  height: 50px;
+  width: 35px;
+  border-radius: 4px;
+  background: #DADADA;
+  background-image: url("/images/svg/SliderArrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.slider_holder.don input::-webkit-slider-thumb {
+  cursor: default !important;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.loader {
+  height: 50%;
+  aspect-ratio: 1 / 1 ;
+  animation: spinner 1.25s linear infinite;
+  background: conic-gradient(
+    var(--black),
+    transparent
+  );
+  padding: 3px;
+  border-radius: 100%;
+  -webkit-mask: 
+     linear-gradient(var(--black) 0 0) content-box, 
+     linear-gradient(var(--black) 0 0);
+  mask: 
+     linear-gradient(var(--black) 0 0) content-box, 
+     linear-gradient(var(--black) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}

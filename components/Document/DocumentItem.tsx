@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { Fragment } from "react";
 import { DocItemsI } from "../../types/documents";
 
-import styles from "../../styles/docview.module.css";
+import styles from "../../styles/document.module.css";
 
 const ParentEl = ({
   parentType,
