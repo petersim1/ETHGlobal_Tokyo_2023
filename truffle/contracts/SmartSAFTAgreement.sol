@@ -50,6 +50,9 @@ contract SmartSAFTAgreement is SmartAgreement, IActionItems {
     
     Super Token Addresses:
         USDCx Mumbai: `0x42bb40bF79730451B11f6De1CbA222F17b87Afd7`
+
+    Deployed SmartSAFTAgreement Contracts:
+        Mumbai Testnet: 0x29c2860270aee9fd8f3087e2ca5d7e142cd3bcf1
      */
     constructor(
         IVestingScheduler _vestingScheduler,

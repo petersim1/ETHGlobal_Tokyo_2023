@@ -57,7 +57,6 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
 
         for (uint8 i = 0; i < tk.numParties; i++) {
             tk.involvedParties[i] = _signees[i];
-            tk.partySigned[_signees[i]] = true;
 
             _mint(_signees[i], _tokenId, 1, "");
         }
