@@ -18,6 +18,25 @@
   src: url("/fonts/SpaceGrotesk-VariableFont_wght.ttf");
 }
 
+:root {
+  --bg-main: #FDFDFD;
+  --black: #151515;
+  --green-main: #6EE39D;
+  --green-dark: #30B164;
+  --green-light: #8BF8B7;
+  --green-faint: #F8FFFB;
+  --red-dark: #B81C38;
+  --red-light: #FF8FAA;
+  --red-faint: #FFF8FA;
+  --grey-light: #E5E5E5;
+  --grey-dark: #919299;
+  --grey-waiting: #F1F5F6;
+  --font-space: "Space-Grotesk";
+  --font-aeonik-light: "Aeonik-Light";
+  --font-aeonik-regular: "Aeonik-Regular";
+  --font-aeonik-bold: "Aeonik-Bold";
+}
+
 *,
 ::before,
 ::after {
@@ -33,6 +52,10 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-main);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,5 +120,6 @@ a {
 }
 
 main {
-  padding: 0 max(20px, calc((100vw - 1440px + 2*55px)/2))
+  width: 100%;
+  overflow-y: scroll;
 }
