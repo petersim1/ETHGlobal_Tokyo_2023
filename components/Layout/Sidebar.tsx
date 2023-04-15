@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from "@/styles/Layout.module.css";
 import Dropdown from "@/components/Elements/Dropdown";
 import Connect from "./Connect";
+import OnRamp from "./OnRamp";
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -20,8 +21,8 @@ const Sidebar = (): JSX.Element => {
             <li aria-disabled={true} data-disabled={true}>
               SAFE
             </li>
-            <li aria-disabled={true} data-disabled={true}>
-              NDA
+            <li>
+              <Link href="/new/NDA">NDA</Link>
             </li>
           </ul>
         </Dropdown>
@@ -33,7 +34,7 @@ const Sidebar = (): JSX.Element => {
         >
           <ul>
             <li>
-              <Link href="/view/SAFT">SAFT</Link>
+              <Link href="/list/SAFT">SAFT</Link>
             </li>
             <li aria-disabled={true} data-disabled={true}>
               SAFE
@@ -45,6 +46,7 @@ const Sidebar = (): JSX.Element => {
         </Dropdown>
         <div className={styles.account}>
           <Connect />
+          <OnRamp />
         </div>
       </div>
     </nav>

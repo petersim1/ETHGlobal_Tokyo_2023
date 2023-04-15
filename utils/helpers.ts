@@ -1,5 +1,10 @@
 import { NDA, SAFT } from "../constants/documents";
 import { CustomFormValidationI } from "../types/documents";
+import {
+  docEditInitialStateBool,
+  docEditInitialState,
+  docInputFieldDisplays,
+} from "../constants/initStates";
 
 export const canSign = (
   address: string,
@@ -56,36 +61,50 @@ export const customFormValidation = (props: CustomFormValidationI): boolean => {
 };
 
 export const getDocMapping = (docType: string): any => {
-  let documentUse = NDA;
+  let documentUse = SAFT;
+  let docEditInit: any = docEditInitialState.SAFT;
+  let docEditBool: any = docEditInitialStateBool.SAFT;
+  let docEditFields: any = docInputFieldDisplays.SAFT;
   if (docType === "SAFE") {
-    documentUse = NDA; // To update in the future.
+    documentUse = NDA; // To update in the future to SAFE versions.
+    docEditInit = docEditInitialState.NDA;
+    docEditBool = docEditInitialStateBool.NDA;
+    docEditFields = docInputFieldDisplays.NDA;
   }
-  if (docType == "SAFT") {
-    documentUse = SAFT;
+  if (docType == "NDA") {
+    documentUse = NDA;
+    docEditInit = docEditInitialState.NDA;
+    docEditBool = docEditInitialStateBool.NDA;
+    docEditFields = docInputFieldDisplays.NDA;
   }
 
-  return documentUse;
+  return {
+    docUse: documentUse,
+    docEditInit,
+    docEditBool,
+    docEditFields,
+  };
 };
 
 export const docFilter = (
-  ndas: any,
+  contracts: any,
   address: string,
   active: boolean,
   readyOnly: boolean,
 ): any[] => {
-  return ndas
-    .filter((nda: any) => {
+  return contracts
+    .filter((contract: any) => {
       if (active) {
         if (readyOnly) {
-          if (address === nda.wallet.disclosing) {
-            return !nda.signed.disclosing;
+          if (address === contract.address.disclosing) {
+            return !contract.status.disclosing;
           } else {
-            return !nda.signed.receiving;
+            return !contract.status.receiving;
           }
         }
-        return !nda.signed.disclosing || !nda.signed.receiving;
+        return !contract.status.disclosing || !contract.status.receiving;
       }
-      return nda.signed.disclosing && nda.signed.receiving;
+      return contract.status.disclosing && contract.status.receiving;
     })
     .sort((a: any, b: any) => b.tokenId - a.tokenId);
 };

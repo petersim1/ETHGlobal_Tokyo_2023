@@ -13,6 +13,8 @@
     "@opengsn/contracts": "^3.0.0-beta.6",
     "@openzeppelin/contracts": "^4.8.3",
     "@safe-global/onramp-kit": "^0.1.1",
+    "@stripe/crypto": "^0.0.4",
+    "@stripe/stripe-js": "^1.52.1",
     "@superfluid-finance/ethereum-contracts": "^1.5.2",
     "@types/node": "18.15.11",
     "@types/react": "18.0.35",

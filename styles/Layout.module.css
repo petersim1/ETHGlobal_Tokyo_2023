@@ -10,6 +10,7 @@
   grid-row: 1 / 2;
   padding: 80px 30px;
   box-shadow: 0px 0px 12px rgba(21, 21, 21, 0.05);
+  z-index: 999;
 }
 
 .sidebar {
@@ -92,4 +93,27 @@
 
 .connect.error {
   background-color: #FF494A;
+}
+
+.onramp {
+  margin: auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  min-width: 130px;
+  width: fit-content;
+  height: 40px;
+  border-radius: 12px;
+  padding: 0 14px;
+  background-color: darkseagreen;
+  cursor: pointer;
+  position: relative;
+}
+
+.onramp iframe {
+  position: absolute;
+  left: 40vw;
+  bottom: 100px; 
 }

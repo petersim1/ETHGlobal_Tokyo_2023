@@ -4,9 +4,9 @@ import { ethers } from "ethers";
 import abi from "../../../truffle/abis/smartSAFTAgreement.json";
 
 const docMapper = {
-  SAFT: process.env.CONTRACT_ADDRESS_SAFT,
-  SAFE: process.env.CONTRACT_ADDRESS_SAFE,
-  NDA: process.env.CONTRACT_ADDRESS_NDA,
+  SAFT: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SAFT,
+  SAFE: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SAFE,
+  NDA: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_NDA,
 };
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
