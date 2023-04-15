@@ -64,7 +64,7 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
 
             _mint(_signees[i], _tokenId, 1, "");
 
-            ownedTokenIds[_msgSender()].push(_tokenId);
+            ownedTokenIds[_signees[i]].push(_tokenId);
         }
 
         emit NewAgreement(_tokenId, _signees);
@@ -115,6 +115,22 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
             ret[i] = ownedTokenIds[_acct][i];
         }
         return ret;
+    }
+
+    function getPartiesInvolved(uint256 _tokenId) public view returns(address[] memory) {
+        AContract storage tk = tokenContracts[_tokenId];
+        address[] memory ret = new address[](tk.numParties);
+        
+        for (uint i = 0; i < tk.numParties; i++) {
+            ret[i] = tk.involvedParties[i];
+        }
+        return ret;
+    }
+
+    function getSigningState(uint256 _tokenId, address _acct) public view returns(bool) {
+        AContract storage tk = tokenContracts[_tokenId];
+
+        return tk.partySigned[_acct];
     }
 
     /**
