@@ -27,7 +27,6 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
   const [validChain, setValidChain] = useState(INITIAL_STATE.validChain);
 
   const requestAccount = (): void => {
-    console.log("CLICKEd", provider);
     if (provider) {
       setIsLoading(true);
       provider
@@ -71,6 +70,26 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
     console.log(all);
   };
 
+  const autoConnect = (providerObj: any): void => {
+    if (providerObj) {
+      setIsLoading(true);
+      providerObj
+        .request({ method: "eth_requestAccounts", params: [] })
+        .then((accounts: string[]) => {
+          if (accounts) {
+            setAccount(accounts[0]);
+            setIsLoaded(true);
+            setIsLoading(false);
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error);
+          setIsLoaded(false);
+          setIsLoading(false);
+        });
+    }
+  };
+
   useEffect(() => {
     const MMSDK = new MetaMaskSDK();
     const ethereum = MMSDK.getProvider();
@@ -82,6 +101,7 @@ export const MetamaskProvider: FC<{ supportedNetworks: string[]; children: React
       ethereum.on("connect", handleConnect);
       setProvider(ethereum);
       isSupportedNetwork(ethereum.chainId);
+      autoConnect(ethereum);
     }
     setIsLoaded(true);
     setIsLoading(false);
