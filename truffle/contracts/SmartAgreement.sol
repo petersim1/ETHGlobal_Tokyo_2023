@@ -23,6 +23,9 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
     mapping (uint256 => AContract) public tokenContracts;
     mapping (address => uint256[]) ownedTokenIds;
 
+    event NewAgreement(uint256 tokenId, address[] parties);
+    event SignAgreement(uint256 tokenId, address partySigning);
+
     constructor(address _forwarder, string memory _uri) ERC1155(_uri) {
         trustedForwarder = _forwarder;
     }
@@ -63,6 +66,8 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
 
             ownedTokenIds[_msgSender()].push(_tokenId);
         }
+
+        emit NewAgreement(_tokenId, _signees);
     }
 
     function sign(uint256 _tokenId) external {
@@ -71,6 +76,8 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
         AContract storage tk = tokenContracts[_tokenId];
 
         tk.partySigned[_msgSender()] = true;
+
+        emit SignAgreement(_tokenId, _msgSender());
     }
 
     function isInvolved(uint256 _tokenId, address _prospectiveSignee) public view returns (bool) {
@@ -100,6 +107,14 @@ contract SmartAgreement is ISmartAgreement, ERC1155, Ownable, ERC2771Recipient {
         }
 
         return true;
+    }
+
+    function getOwnedTokenIds(address _acct) public view returns(uint256[] memory) {
+        uint256[] memory ret = new uint256[](ownedTokenIds[_acct].length);
+        for (uint i = 0; i < ownedTokenIds[_acct].length; i++) {
+            ret[i] = ownedTokenIds[_acct][i];
+        }
+        return ret;
     }
 
     /**
