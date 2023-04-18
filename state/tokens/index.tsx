@@ -1,8 +1,7 @@
-import { useState, useEffect, createContext, ReactNode, FC, useMemo, useContext } from "react";
+import { useState, createContext, ReactNode, FC, useMemo, useEffect } from "react";
 import { INITIAL_STATE_CONTEXT } from "./constants";
 import { StateContextType, TokenTypeI } from "./types";
-import { MetamaskContext } from "../wallet";
-
+import { useAccount } from "wagmi";
 // Our "auth" is dependent on client-facing applications, like wagmi + rainbow.
 // isConnected & address will be populated before component mounts.
 // It isn't a true auth, and upon every page load, the context gets reset, which
@@ -19,21 +18,19 @@ export const TokensProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [tokens, setTokens] = useState<TokenTypeI[]>([]);
-
-  const { account, isConnected } = useContext(MetamaskContext);
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    if (!!account && isConnected) {
-      setLoading(true);
-      setOk(false);
-      fetch(`/api/balance/SAFT?address=${account}`)
+    if (address && isConnected) {
+      console.log("FIRED");
+      fetch(`/api/balance/SAFT?address=${address}`)
         .then((response) => {
-          console.log(response);
           if (response.ok) {
             return response.json();
           }
         })
         .then((result) => {
+          console.log("DONE");
           setTokens(result.tokens);
           setLoading(false);
           setOk(true);
@@ -43,7 +40,7 @@ export const TokensProvider: FC<{ children: ReactNode }> = ({ children }) => {
           setLoading(false);
         });
     }
-  }, [isConnected, account]);
+  }, [address, isConnected]);
 
   const value = useMemo(() => {
     return {
@@ -54,7 +51,7 @@ export const TokensProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setTokens,
       setLoading,
     };
-  }, [account, tokens, loading, ok]);
+  }, [tokens, loading, ok]);
 
   return <TokensContext.Provider value={value}>{children}</TokensContext.Provider>;
 };

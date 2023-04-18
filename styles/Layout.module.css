@@ -62,6 +62,15 @@
   width: 100%;
 }
 
+.account div:nth-child(1) {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.account div:nth-child(1) button {
+  width: 100%;
+}
+
 .connect {
   width: fit-content;
   min-width: 130px;

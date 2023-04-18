@@ -7,8 +7,8 @@ import Listed from "../../components/Document/Listed";
 import styles from "../../styles/document.module.css";
 import Action from "../../components/Elements/Action";
 import { TokensContext } from "@/state/tokens";
-import { MetamaskContext } from "@/state/wallet";
 import { TokenTypeI } from "@/state/tokens/types";
+import { useAccount } from "wagmi";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const slug = (context.query.slug as string) || "SAFT";
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Docs = ({ docType, activeStr }: { docType: any; activeStr: string }): JSX.Element => {
   const { tokens } = useContext(TokensContext);
-  const { account, isConnected } = useContext(MetamaskContext);
+  const { address } = useAccount();
 
   const [active, setActive] = useState<boolean>(String(activeStr) !== "false");
   const [timeframe, setTimeframe] = useState("month");
@@ -35,7 +35,7 @@ const Docs = ({ docType, activeStr }: { docType: any; activeStr: string }): JSX.
   const [trimmedTokens, setTrimmedTokens] = useState<TokenTypeI[]>([]);
 
   useEffect(() => {
-    if (account && isConnected) {
+    if (tokens.length > 0) {
       const tokensTrimmed = tokens.filter((token) => {
         return token.docType === docType;
       });
@@ -55,7 +55,7 @@ const Docs = ({ docType, activeStr }: { docType: any; activeStr: string }): JSX.
       setNumActive(0);
       setNumClosed(0);
     };
-  }, [account, isConnected]);
+  }, [tokens]);
 
   return (
     <div className={styles.main_holder}>
@@ -74,7 +74,7 @@ const Docs = ({ docType, activeStr }: { docType: any; activeStr: string }): JSX.
           contracts={trimmedTokens}
           timeframe={timeframe}
           readyOnly={checked}
-          address={account}
+          address={address}
         />
       )}
       {fetched && trimmedTokens.length === 0 && (

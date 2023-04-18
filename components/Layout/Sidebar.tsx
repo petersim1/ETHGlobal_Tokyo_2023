@@ -1,8 +1,9 @@
 import Link from "next/link";
 import styles from "@/styles/Layout.module.css";
 import Dropdown from "@/components/Elements/Dropdown";
-import Connect from "./Connect";
+// import Connect from "./Connect";
 import OnRamp from "./OnRamp";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Sidebar = (): JSX.Element => {
   return (
@@ -45,7 +46,7 @@ const Sidebar = (): JSX.Element => {
           </ul>
         </Dropdown>
         <div className={styles.account}>
-          <Connect />
+          <ConnectButton showBalance={false} />
           <OnRamp />
         </div>
       </div>

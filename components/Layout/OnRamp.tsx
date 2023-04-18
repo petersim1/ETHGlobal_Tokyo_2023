@@ -1,16 +1,16 @@
 /* eslint-disable max-len */
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from "react";
-import { MetamaskContext } from "@/state/wallet";
+import React from "react";
+import { useAccount } from "wagmi";
 import { SafeOnRampKit, StripeAdapter } from "@safe-global/onramp-kit";
 
 import styles from "@/styles/Layout.module.css";
 
 const OnRamp = (): JSX.Element => {
-  const { account } = useContext(MetamaskContext);
+  const { address, isConnected, isConnecting } = useAccount();
 
   const fundWallet = async (): Promise<void> => {
-    if (!account) return;
+    if (!address) return;
     const safeOnRamp = await SafeOnRampKit.init(
       new StripeAdapter({
         // Get public key from Stripe: https://dashboard.stripe.com/register
@@ -22,7 +22,7 @@ const OnRamp = (): JSX.Element => {
     );
 
     const sessionData = await safeOnRamp.open({
-      walletAddress: account,
+      walletAddress: address,
       networks: ["polygon", "ethereum"],
       element: "#stripe-root",
       // Optional, if you want to use a specific created session

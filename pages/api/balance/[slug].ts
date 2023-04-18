@@ -14,12 +14,12 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const docType = slug?.toString().toUpperCase() || "SAFT";
   const contractAddress = docMapper[docType as keyof typeof docMapper] as string;
 
-  const provider = new ethers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
+  const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
 
   const contract = new ethers.Contract(contractAddress, abi, provider);
   return contract
     .getOwnedTokenIds(address)
-    .then((tokenIds) => {
+    .then((tokenIds: string[]) => {
       return Promise.all(
         tokenIds.map(async (tokenId: string) => {
           const parties = await contract.getPartiesInvolved(tokenId.toString());
@@ -43,10 +43,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         }),
       );
     })
-    .then((tokens) => {
+    .then((tokens: any[]) => {
       return res.status(200).json({ tokens });
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       console.log(error);
       return res.status(404).send("BAD");
     });
